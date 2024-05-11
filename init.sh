@@ -9,7 +9,7 @@ append_to_zshrc() {
   else
     zshrc="$HOME/.zshrc"
   fi
-  
+
   if ! grep -Fqs "$text" "$zshrc"; then
     if [ "$skip_new_line" -eq 1 ]; then
       printf "%s\\n" "$text" >> "$zshrc"
@@ -17,7 +17,6 @@ append_to_zshrc() {
       printf "\\n%s\\n" "$text" >> "$zshrc"
     fi
   fi
-
 }
 
 prepend_to_zshrc() {
