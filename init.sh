@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 append_to_zshrc() {
-
  local text="$1" zshrc
  local skip_new_line="${2:-0}"
 
@@ -21,4 +20,29 @@ append_to_zshrc() {
 
 }
 
+pre_setup() {
+  if [ ! -d "$HOME/.bin/" ]; then
+    mkdir "$HOME/.bin"
+  fi
+
+  if [ ! -f "$HOME/.zshrc" ]; then
+    touch "$HOME/.zshrc"
+  fi
+
+  if [ ! -f "$HOME/.Brewfile" ]; then
+    touch "$HOME/.Brewfile"
+  fi
+
+  append_to_zshrc "export PATH=\"$HOME/.bin:$PATH\""
+
+  # Determine Homebrew prefix
+  ARCH="$(uname -m)"
+  if [ "$ARCH" = "arm64" ]; then
+    HOMEBREW_PREFIX="/opt/homebrew"
+  else
+    HOMEBREW_PREFIX="/usr/local"
+  fi
+}
+
+pre_setup
 echo "test"
