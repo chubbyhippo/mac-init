@@ -32,30 +32,14 @@ prepend_to_zshrc() {
   printf "%s\n\n%s" "$text" "$(cat "$zshrc")" > "$zshrc"
 }
 pre_setup() {
-  if [ ! -d "$HOME/.bin/" ]; then
-    mkdir "$HOME/.bin"
-  fi
-
   if [ ! -f "$HOME/.zshrc" ]; then
     touch "$HOME/.zshrc"
   fi
-
-  if [ ! -f "$HOME/.Brewfile" ]; then
-    touch "$HOME/.Brewfile"
-  fi
-
   append_to_zshrc "export PATH=\"$HOME/.bin:$PATH\""
-
-  # Determine Homebrew prefix
-  ARCH="$(uname -m)"
-  if [ "$ARCH" = "arm64" ]; then
-    HOMEBREW_PREFIX="/opt/homebrew"
-  else
-    HOMEBREW_PREFIX="/usr/local"
-  fi
 }
 
 configure_zsh() {
+
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" "" --unattended
 }
 
