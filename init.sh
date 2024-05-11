@@ -45,8 +45,8 @@ configure_zsh() {
 
 install_brew(){
   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  curl https://raw.githubusercontent.com/chubbyhippo/homebrew/main/Brewfile -o "$HOME/.brewfile"
-
+  curl https://raw.githubusercontent.com/chubbyhippo/homebrew/main/Brewfile -o "$HOME/.Brewfile"
+  brew bundle --global
 }
 
 prepend_to_zshrc "test"
