@@ -55,5 +55,9 @@ pre_setup() {
   fi
 }
 
+configure_zsh() {
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" "" --unattended
+}
+
 prepend_to_zshrc "test"
 echo "test"
