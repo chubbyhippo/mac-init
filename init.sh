@@ -20,6 +20,17 @@ append_to_zshrc() {
 
 }
 
+prepend_to_zshrc() {
+  local text="$1" zshrc
+
+  if [ -w "$HOME/.zshrc.local" ]; then
+    zshrc="$HOME/.zshrc.local"
+  else
+    zshrc="$HOME/.zshrc"
+  fi
+
+  printf "%s\n\n%s" "$text" "$(cat "$zshrc")" > "$zshrc"
+}
 pre_setup() {
   if [ ! -d "$HOME/.bin/" ]; then
     mkdir "$HOME/.bin"
@@ -44,5 +55,5 @@ pre_setup() {
   fi
 }
 
-pre_setup
+prepend_to_zshrc "test"
 echo "test"
