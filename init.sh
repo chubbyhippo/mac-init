@@ -49,4 +49,5 @@ install_brew() {
 }
 
 prepend_to_zshrc "test"
+append_to_zshrc "echo 'export PATH="/usr/local/opt/curl/bin:$PATH"' >> ~/.zshrc"
 echo "test"
