@@ -49,6 +49,7 @@ install_brew() {
 }
 
 defaults write -g NSWindowShouldDragOnGesture YES
+curl https://raw.githubusercontent.com/chubbyhippo/aerospace/main/.aerospace.toml -o ~/.aerospace.toml
 prepend_to_zshrc "test"
 append_to_zshrc "export PATH=\"/usr/local/opt/curl/bin:$PATH\""
 echo "test"
