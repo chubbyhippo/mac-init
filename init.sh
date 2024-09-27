@@ -34,7 +34,7 @@ configure_zsh() {
 }
 
 install_brew() {
-	sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 	curl https://raw.githubusercontent.com/chubbyhippo/homebrew/main/Brewfile -o "$HOME/.Brewfile"
 	brew bundle --global
 	export PATH="/usr/local/opt/curl/bin:$PATH"
