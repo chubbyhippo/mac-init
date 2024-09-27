@@ -45,6 +45,7 @@ install_brew() {
 }
 
 mac_setup() {
+	xcode-select --install
 	defaults write -g NSWindowShouldDragOnGesture YES
 	curl https://raw.githubusercontent.com/chubbyhippo/aerospace/main/.aerospace.toml -o ~/.aerospace.toml
 }
