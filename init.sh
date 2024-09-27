@@ -22,6 +22,7 @@ prepend_to_zshrc() {
 
 	printf "%s\n\n%s" "$text" "$(cat "$zshrc")" >"$zshrc"
 }
+
 pre_setup() {
 
 	if [ ! -f "$HOME/.zshrc" ]; then
@@ -39,13 +40,14 @@ install_brew() {
 	NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 	curl https://raw.githubusercontent.com/chubbyhippo/homebrew/main/Brewfile -o "$HOME/.Brewfile"
 	brew bundle --global
+	append_to_zshrc "export PATH=\"/usr/local/opt/curl/bin:$PATH\""
+	append_to_zshrc "export PATH=\"/usr/local/opt/libpq/bin:$PATH\""
 }
 
 mac_setup() {
 	defaults write -g NSWindowShouldDragOnGesture YES
 	curl https://raw.githubusercontent.com/chubbyhippo/aerospace/main/.aerospace.toml -o ~/.aerospace.toml
 }
+
 prepend_to_zshrc "test"
-append_to_zshrc "export PATH=\"/usr/local/opt/curl/bin:$PATH\""
-append_to_zshrc "export PATH=\"/usr/local/opt/libpq/bin:$PATH\""
 echo "test"
