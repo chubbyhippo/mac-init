@@ -23,9 +23,11 @@ prepend_to_zshrc() {
 	printf "%s\n\n%s" "$text" "$(cat "$zshrc")" >"$zshrc"
 }
 pre_setup() {
+
 	if [ ! -f "$HOME/.zshrc" ]; then
 		touch "$HOME/.zshrc"
 	fi
+
 	append_to_zshrc "export PATH=\"$HOME/.bin:$PATH\""
 }
 
