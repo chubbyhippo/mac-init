@@ -1,14 +1,10 @@
 #!/usr/bin/env bash
 
 append_to_zshrc() {
- local text="$1" zshrc
- local skip_new_line="${2:-0}"
+  local text="$1" zshrc
+  local skip_new_line="${2:-0}"
 
-  if [ -w "$HOME/.zshrc.local" ]; then
-    zshrc="$HOME/.zshrc.local"
-  else
-    zshrc="$HOME/.zshrc"
-  fi
+  zshrc="$HOME/.zshrc"
 
   if ! grep -Fqs "$text" "$zshrc"; then
     if [ "$skip_new_line" -eq 1 ]; then
@@ -22,11 +18,7 @@ append_to_zshrc() {
 prepend_to_zshrc() {
   local text="$1" zshrc
 
-  if [ -w "$HOME/.zshrc.local" ]; then
-    zshrc="$HOME/.zshrc.local"
-  else
-    zshrc="$HOME/.zshrc"
-  fi
+  zshrc="$HOME/.zshrc"
 
   printf "%s\n\n%s" "$text" "$(cat "$zshrc")" > "$zshrc"
 }
