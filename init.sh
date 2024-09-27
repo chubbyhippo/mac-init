@@ -50,4 +50,8 @@ mac_setup() {
 }
 
 prepend_to_zshrc "test"
-echo "test"
+pre_setup
+configure_zsh
+install_brew
+mac_setup
+echo "Finished"
