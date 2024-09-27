@@ -50,8 +50,8 @@ mac_setup() {
 	curl https://raw.githubusercontent.com/chubbyhippo/aerospace/main/.aerospace.toml -o ~/.aerospace.toml
 }
 
+mac_setup
 pre_setup
 install_brew
 configure_zsh
-mac_setup
 echo "Finished"
