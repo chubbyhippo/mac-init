@@ -34,7 +34,7 @@ configure_zsh() {
 }
 
 install_brew() {
-	/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+	sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 	curl https://raw.githubusercontent.com/chubbyhippo/homebrew/main/Brewfile -o "$HOME/.Brewfile"
 	brew bundle --global
 	export PATH="/usr/local/opt/curl/bin:$PATH"
@@ -59,8 +59,9 @@ mac_setup() {
 	defaults write -g NSWindowShouldDragOnGesture YES
 	curl https://raw.githubusercontent.com/chubbyhippo/aerospace/main/.aerospace.toml -o ~/.aerospace.toml
 }
+
+#mac_setup
 pre_setup
-mac_setup
 install_brew
 configure_zsh
 echo "Finished"
