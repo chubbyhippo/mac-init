@@ -32,7 +32,6 @@ pre_setup() {
 }
 
 configure_zsh() {
-	# install oh my zsh
 	sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" "" --unattended
 }
 
@@ -42,8 +41,10 @@ install_brew() {
 	brew bundle --global
 }
 
-defaults write -g NSWindowShouldDragOnGesture YES
-curl https://raw.githubusercontent.com/chubbyhippo/aerospace/main/.aerospace.toml -o ~/.aerospace.toml
+mac_setup() {
+	defaults write -g NSWindowShouldDragOnGesture YES
+	curl https://raw.githubusercontent.com/chubbyhippo/aerospace/main/.aerospace.toml -o ~/.aerospace.toml
+}
 prepend_to_zshrc "test"
 append_to_zshrc "export PATH=\"/usr/local/opt/curl/bin:$PATH\""
 append_to_zshrc "export PATH=\"/usr/local/opt/libpq/bin:$PATH\""
