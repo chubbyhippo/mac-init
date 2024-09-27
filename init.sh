@@ -62,6 +62,7 @@ mac_setup() {
 
 #mac_setup
 pre_setup
+#configure_zsh
 install_brew
-configure_zsh
+
 echo "Finished"
