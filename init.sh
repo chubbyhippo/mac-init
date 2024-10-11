@@ -47,9 +47,15 @@ mac_setup() {
 	curl https://raw.githubusercontent.com/chubbyhippo/aerospace/main/.aerospace.toml -o ~/.aerospace.toml
 }
 
+install_mise() {
+	curl https://mise.run | sh
+	echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc
+}
+
 mac_setup
 pre_setup
 configure_zsh
 install_brew
+install_mise
 
 echo "Finished"
