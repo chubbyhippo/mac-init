@@ -39,9 +39,7 @@ install_brew() {
 	brew bundle --global
 	export PATH="/usr/local/opt/curl/bin:$PATH"
 	export PATH="/usr/local/opt/libpq/bin:$PATH"
- 	append_to_zshrc "export PATH=\"$HOME/.bin:$PATH\""
-  	append_to_zshrc "eval \"\$(/usr/local/bin/mise activate zsh)\""
-  	
+ 	append_to_zshrc "export PATH=\"$HOME/.bin:$PATH\""	
 }
 
 mac_setup() {
