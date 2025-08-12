@@ -6,6 +6,8 @@ defaults write com.apple.universalaccess reduceMotion -bool true
 defaults write -g NSWindowShouldDragOnGesture YES
 # autohide dock
 defaults write com.apple.dock "autohide" -bool "true" && killall Dock
+# remove dock autohide animation
+defaults write com.apple.dock "autohide-time-modifier" -float "0" && killall Dock
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
