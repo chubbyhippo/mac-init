@@ -7,3 +7,5 @@ curl -s https://raw.githubusercontent.com/chubbyhippo/mac-init/main/init.sh | /u
 ```sh
 shfmt -l -w .
 ```
+### refs
+https://macos-defaults.com/
