@@ -4,6 +4,8 @@
 defaults write com.apple.universalaccess reduceMotion -bool true
 # ctrl + cmd and click to drag from anywhere
 defaults write -g NSWindowShouldDragOnGesture YES
+# autohide dock
+defaults write com.apple.dock "autohide" -bool "true" && killall Dock
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
