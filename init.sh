@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
-# reduce motion
-defaults write com.apple.universalaccess reduceMotion -bool true
+# reduce motion System Preferences -> Privacy -> Full Disk Access
+defaults write com.apple.universalaccess "reduceMotion" -bool "true"
 # ctrl + cmd and click to drag from anywhere
 defaults write -g NSWindowShouldDragOnGesture YES
 # autohide dock, cmd + alt + d
