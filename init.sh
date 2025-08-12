@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 append_to_zshrc() {
 	local text="$1" zshrc
@@ -46,15 +46,8 @@ mac_setup() {
 	defaults write -g NSWindowShouldDragOnGesture YES
 }
 
-install_mise() {
-	curl https://mise.run | sh
-	echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc
-}
-
 mac_setup
 pre_setup
 configure_zsh
 install_brew
-install_mise
 
-echo "Finished"
