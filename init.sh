@@ -14,6 +14,8 @@ defaults write com.apple.dock "mineffect" -string "scale" && killall Dock
 defaults write com.apple.finder "AppleShowAllFiles" -bool "true" && killall Finder
 # show path bar
 defaults write com.apple.finder "ShowPathbar" -bool "true" && killall Finder
+# keep folders on top
+defaults write com.apple.finder "_FXSortFoldersFirst" -bool "true" && killall Finder
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
