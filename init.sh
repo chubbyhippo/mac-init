@@ -20,6 +20,9 @@ defaults write com.apple.finder "_FXSortFoldersFirst" -bool "true" && killall Fi
 defaults write com.apple.finder "FinderSpawnTab" -bool "false" && killall Finder
 # set search scope to current folder
 defaults write com.apple.finder "FXDefaultSearchScope" -string "SCcf" && killall Finder
+# do not display the warning when changing the file extension
+defaults write com.apple.finder "FXEnableExtensionChangeWarning" -bool "false" && killall Finder
+
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
