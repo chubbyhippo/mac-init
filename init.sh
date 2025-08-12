@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+
 # reduce motion
 defaults write com.apple.universalaccess reduceMotion -bool true
 # ctrl + cmd and click to drag from anywhere
