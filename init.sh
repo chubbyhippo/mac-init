@@ -18,6 +18,8 @@ defaults write com.apple.finder "ShowPathbar" -bool "true" && killall Finder
 defaults write com.apple.finder "_FXSortFoldersFirst" -bool "true" && killall Finder
 # open folder in new window with right click
 defaults write com.apple.finder "FinderSpawnTab" -bool "false" && killall Finder
+# set search scope to current folder
+defaults write com.apple.finder "FXDefaultSearchScope" -string "SCcf" && killall Finder
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
