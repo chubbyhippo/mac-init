@@ -12,6 +12,8 @@ defaults write com.apple.dock "autohide-time-modifier" -float "0" && killall Doc
 defaults write com.apple.dock "mineffect" -string "scale" && killall Dock
 # show all hidden files, cmd + shift + .
 defaults write com.apple.finder "AppleShowAllFiles" -bool "true" && killall Finder
+# show path bar
+defaults write com.apple.finder "ShowPathbar" -bool "true" && killall Finder
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
