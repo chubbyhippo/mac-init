@@ -24,6 +24,8 @@ defaults write com.apple.finder "FXDefaultSearchScope" -string "SCcf" && killall
 defaults write com.apple.finder "FXEnableExtensionChangeWarning" -bool "false" && killall Finder
 # trackpad three finger drag
 defaults write com.apple.AppleMultitouchTrackpad "TrackpadThreeFingerDrag" -bool "true"
+# Fn to change input source
+defaults write com.apple.HIToolbox AppleFnUsageType -int "1"
 
 # brew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
