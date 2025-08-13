@@ -1,5 +1,22 @@
 #!/usr/bin/env sh
 
+append() {
+  if [ "$#" -ne 2 ]; then
+    printf '%s\n' 'Usage: append "TEXT" FILE' >&2
+    return 2
+  fi
+
+  line=$1
+  file=$2
+
+  if [ -f "$file" ] && grep -F -x -q -e "$line" "$file"; then
+    return 0
+  fi
+
+  printf '%s\n' "$line" >> "$file"
+}
+
+
 # reduce motion System Preferences -> Privacy -> Full Disk Access
 defaults write com.apple.universalaccess "reduceMotion" -bool "true"
 # ctrl + cmd and click to drag from anywhere
