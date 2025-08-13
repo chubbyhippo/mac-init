@@ -27,6 +27,9 @@ defaults write com.apple.AppleMultitouchTrackpad "TrackpadThreeFingerDrag" -bool
 # Fn to change input source
 defaults write com.apple.HIToolbox AppleFnUsageType -int "1"
 
+# backup .zshrc
+cp ~/.zshrc ~/.zshrc-backup-$(date +%Y%m%d%H%M%S)
+
 # brew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 curl https://raw.githubusercontent.com/chubbyhippo/homebrew-brew/refs/heads/main/Brewfile -o "$HOME/.Brewfile"
