@@ -8,7 +8,7 @@ append() {
 
   line=$1
   file=$2
-
+  # Do nothing if the exact line already exists
   if [ -f "$file" ] && grep -F -x -q -e "$line" "$file"; then
     return 0
   fi
