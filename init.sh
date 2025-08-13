@@ -16,6 +16,30 @@ append() {
   printf '%s\n' "$line" >> "$file"
 }
 
+prepend() {
+  if [ "$#" -ne 2 ]; then
+    printf '%s\n' 'Usage: prepend "TEXT" FILE' >&2
+    return 2
+  fi
+
+  line=$1
+  file=$2
+
+  # Do nothing if the exact line already exists
+  if [ -f "$file" ] && grep -F -x -q -e "$line" "$file"; then
+    return 0
+  fi
+
+  tmp="${file}.$$.__tmp"
+
+  if [ -f "$file" ]; then
+    { printf '%s\n' "$line"; cat "$file"; } > "$tmp" || return 1
+  else
+    printf '%s\n' "$line" > "$tmp" || return 1
+  fi
+
+  mv "$tmp" "$file"
+}
 
 # reduce motion System Preferences -> Privacy -> Full Disk Access
 defaults write com.apple.universalaccess "reduceMotion" -bool "true"
