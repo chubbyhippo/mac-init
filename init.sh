@@ -28,7 +28,7 @@ defaults write com.apple.AppleMultitouchTrackpad "TrackpadThreeFingerDrag" -bool
 defaults write com.apple.HIToolbox AppleFnUsageType -int "1"
 
 # backup .zshrc
-cp ~/.zshrc ~/.zshrc-backup-$(date +%Y%m%d%H%M%S)
+cp "$HOME/.zshrc" "$HOME/.zshrc-backup-$(date +%Y%m%d%H%M%S)"
 
 # brew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
