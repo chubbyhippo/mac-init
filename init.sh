@@ -45,6 +45,8 @@ prepend() {
 defaults write com.apple.universalaccess "reduceMotion" -bool "true"
 # ctrl + cmd and click to drag from anywhere
 defaults write -g NSWindowShouldDragOnGesture YES
+# move focus with tab and shift + tab
+defaults write NSGlobalDomain AppleKeyboardUIMode -int "2"
 # autohide dock, cmd + alt + d
 defaults write com.apple.dock "autohide" -bool "true" && killall Dock
 # remove dock autohide animation
