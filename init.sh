@@ -66,7 +66,7 @@ defaults write com.apple.finder "AppleShowAllFiles" -bool "true"
 # show path bar
 defaults write com.apple.finder "ShowPathbar" -bool "true" && killall Finder
 # keep folders on top
-defaults write com.apple.finder "_FXSortFoldersFirst" -bool "true" && killall Finder
+defaults write com.apple.finder "_FXSortFoldersFirst" -bool "true"
 # open folder in new window with right click
 defaults write com.apple.finder "FinderSpawnTab" -bool "false"
 # set search scope to current folder
