@@ -81,6 +81,8 @@ defaults write com.apple.AppleMultitouchTrackpad "TrackpadRightClick" -bool "tru
 defaults write com.apple.AppleMultitouchTrackpad "TrackpadThreeFingerDrag" -bool "true"
 # Fn to change input source
 defaults write com.apple.HIToolbox AppleFnUsageType -int "1"
+# Use F1–F12 as standard function keys (require Fn for media/brightness)
+defaults write -g com.apple.keyboard.fnState -bool true
 
 # backup .zshrc
 cp "$HOME/.zshrc" "$HOME/.zshrc-backup-$(date +%Y%m%d%H%M%S)"
