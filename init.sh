@@ -70,7 +70,7 @@ defaults write com.apple.finder "_FXSortFoldersFirst" -bool "true" && killall Fi
 # open folder in new window with right click
 defaults write com.apple.finder "FinderSpawnTab" -bool "false" && killall Finder
 # set search scope to current folder
-defaults write com.apple.finder "FXDefaultSearchScope" -string "SCcf" && killall Finder
+defaults write com.apple.finder "FXDefaultSearchScope" -string "SCcf"
 # do not display the warning when changing the file extension
 defaults write com.apple.finder "FXEnableExtensionChangeWarning" -bool "false"
 # tap to click
