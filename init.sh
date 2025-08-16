@@ -56,7 +56,7 @@ defaults write -g NSWindowShouldDragOnGesture YES
 # move focus with tab and shift + tab
 defaults write NSGlobalDomain AppleKeyboardUIMode -int "2"
 # autohide dock, cmd + alt + d
-defaults write com.apple.dock "autohide" -bool "true" && killall Dock
+defaults write com.apple.dock "autohide" -bool "true"
 # remove dock autohide animation
 defaults write com.apple.dock "autohide-time-modifier" -float "0" && killall Dock
 # minimize animation effect
