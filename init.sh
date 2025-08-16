@@ -58,7 +58,7 @@ defaults write NSGlobalDomain AppleKeyboardUIMode -int "2"
 # autohide dock, cmd + alt + d
 defaults write com.apple.dock "autohide" -bool "true"
 # remove dock autohide animation
-defaults write com.apple.dock "autohide-time-modifier" -float "0" && killall Dock
+defaults write com.apple.dock "autohide-time-modifier" -float "0"
 # minimize animation effect
 defaults write com.apple.dock "mineffect" -string "scale" && killall Dock
 # show all hidden files, cmd + shift + .
