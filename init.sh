@@ -72,7 +72,7 @@ defaults write com.apple.finder "FinderSpawnTab" -bool "false" && killall Finder
 # set search scope to current folder
 defaults write com.apple.finder "FXDefaultSearchScope" -string "SCcf" && killall Finder
 # do not display the warning when changing the file extension
-defaults write com.apple.finder "FXEnableExtensionChangeWarning" -bool "false" && killall Finder
+defaults write com.apple.finder "FXEnableExtensionChangeWarning" -bool "false"
 # tap to click
 defaults write com.apple.AppleMultitouchTrackpad "Clicking" -bool "true"
 # trackpad right click with two finger tab
