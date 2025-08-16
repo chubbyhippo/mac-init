@@ -60,7 +60,7 @@ defaults write com.apple.dock "autohide" -bool "true"
 # remove dock autohide animation
 defaults write com.apple.dock "autohide-time-modifier" -float "0"
 # minimize animation effect
-defaults write com.apple.dock "mineffect" -string "scale" && killall Dock
+defaults write com.apple.dock "mineffect" -string "scale"
 # show all hidden files, cmd + shift + .
 defaults write com.apple.finder "AppleShowAllFiles" -bool "true" && killall Finder
 # show path bar
