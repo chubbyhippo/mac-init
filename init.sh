@@ -88,6 +88,7 @@ defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 '{ena
 /usr/libexec/PlistBuddy -c "Set :AppleSymbolicHotKeys:60:enabled false" "$HOME/Library/Preferences/com.apple.symbolichotkeys.plist"
 # Disable next input source (id 61), ctrl + shift + space
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 '{enabled = 0; value = { parameters = (32,49,786432); type = standard; }; }'
+/usr/libexec/PlistBuddy -c "Set :AppleSymbolicHotKeys:61:enabled false" "$HOME/Library/Preferences/com.apple.symbolichotkeys.plist"
 
 # backup .zshrc
 cp "$HOME/.zshrc" "$HOME/.zshrc-backup-$(date +%Y%m%d%H%M%S)"
