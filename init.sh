@@ -82,7 +82,7 @@ defaults write com.apple.AppleMultitouchTrackpad "TrackpadThreeFingerDrag" -bool
 # Fn to change input source
 defaults write com.apple.HIToolbox AppleFnUsageType -int "1"
 # Use F1–F12 as standard function keys (require Fn for media/brightness)
-defaults write -g com.apple.keyboard.fnState -bool true
+defaults write NSGlobalDomain com.apple.keyboard.fnState -bool true
 # Disable previous input source (id 60), ctrl + space
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 "{enabled = 0; value = { type = standard; parameters = (32, 49, 262144); }; }"
 # Disable next input source (id 61), ctrl + shift + space
