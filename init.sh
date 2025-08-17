@@ -85,6 +85,7 @@ defaults write com.apple.HIToolbox AppleFnUsageType -int "1"
 defaults write NSGlobalDomain com.apple.keyboard.fnState -bool true
 # Disable previous input source (id 60), ctrl + space
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 '{enabled = 0; value = { parameters = (32,49,262144); type = standard; }; }'
+/usr/libexec/PlistBuddy -c "Set :AppleSymbolicHotKeys:60:enabled false" "$HOME/Library/Preferences/com.apple.symbolichotkeys.plist"
 # Disable next input source (id 61), ctrl + shift + space
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 '{enabled = 0; value = { parameters = (32,49,786432); type = standard; }; }'
 
