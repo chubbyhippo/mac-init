@@ -84,9 +84,9 @@ defaults write com.apple.HIToolbox AppleFnUsageType -int "1"
 # Use F1–F12 as standard function keys (require Fn for media/brightness)
 defaults write NSGlobalDomain com.apple.keyboard.fnState -bool true
 # Disable previous input source (id 60), ctrl + space
-/usr/libexec/PlistBuddy -c "Set :AppleSymbolicHotKeys:60:enabled false" $HOME/Library/Preferences/com.apple.symbolichotkeys.plist
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 '{enabled = 0; value = { parameters = (32,49,262144); type = standard; }; }'
 # Disable next input source (id 61), ctrl + shift + space
-/usr/libexec/PlistBuddy -c "Set :AppleSymbolicHotKeys:61:enabled false" $HOME/Library/Preferences/com.apple.symbolichotkeys.plist
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 61 '{enabled = 0; value = { parameters = (32,49,786432); type = standard; }; }'
 
 # backup .zshrc
 cp "$HOME/.zshrc" "$HOME/.zshrc-backup-$(date +%Y%m%d%H%M%S)"
