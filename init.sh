@@ -52,7 +52,7 @@ prepend() {
 # reduce motion System Preferences -> Privacy -> Full Disk Access
 defaults write com.apple.universalaccess "reduceMotion" -bool "true"
 # ctrl + cmd and click to drag from anywhere
-defaults write -g NSWindowShouldDragOnGesture YES
+defaults write NSGlobalDomain NSWindowShouldDragOnGesture YES
 # move focus with tab and shift + tab
 defaults write NSGlobalDomain AppleKeyboardUIMode -int "2"
 # autohide dock, cmd + alt + d
