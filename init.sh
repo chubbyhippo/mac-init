@@ -85,6 +85,8 @@ defaults write com.apple.HIToolbox AppleFnUsageType -int "1"
 defaults write NSGlobalDomain com.apple.keyboard.fnState -bool true
 # keep space arrangement for the mission control
 defaults write com.apple.dock "mru-spaces" -bool "false" 
+# disable application from internet popup
+defaults write com.apple.LaunchServices "LSQuarantine" -bool "false"
 # Disable previous input source (id 60), ctrl + space
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 '{enabled = 0; value = { parameters = (32,49,262144); type = standard; }; }'
 /usr/libexec/PlistBuddy -c "Set :AppleSymbolicHotKeys:60:enabled false" "$HOME/Library/Preferences/com.apple.symbolichotkeys.plist"
