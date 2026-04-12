@@ -104,3 +104,4 @@ fi
 curl https://raw.githubusercontent.com/chubbyhippo/homebrew-brew/refs/heads/main/Brewfile -o "$HOME/.Brewfile"
 append 'eval "$(mise activate zsh)"' "$HOME/.zshrc"
 curl https://raw.githubusercontent.com/chubbyhippo/aerospace/main/.aerospace.toml -o ~/.aerospace.toml
+curl https://raw.githubusercontent.com/chubbyhippo/homebrew-brew/refs/heads/main/install.sh | /usr/bin/env sh
