@@ -1,52 +1,55 @@
 #!/usr/bin/env sh
 
 line_exists() {
-  if [ "$#" -ne 2 ]; then
-    printf '%s\n' 'Usage: line_exists "TEXT" FILE' >&2
-    return 2
-  fi
+	if [ "$#" -ne 2 ]; then
+		printf '%s\n' 'Usage: line_exists "TEXT" FILE' >&2
+		return 2
+	fi
 
-  [ -f "$2" ] && grep -F -x -q -e "$1" "$2"
+	[ -f "$2" ] && grep -F -x -q -e "$1" "$2"
 }
 
 append() {
-  if [ "$#" -ne 2 ]; then
-    printf '%s\n' 'Usage: append "TEXT" FILE' >&2
-    return 2
-  fi
+	if [ "$#" -ne 2 ]; then
+		printf '%s\n' 'Usage: append "TEXT" FILE' >&2
+		return 2
+	fi
 
-  line=$1
-  file=$2
-  # Do nothing if the exact line already exists
-  if line_exists "$line" "$file"; then
-    return 0
-  fi
+	line=$1
+	file=$2
+	# Do nothing if the exact line already exists
+	if line_exists "$line" "$file"; then
+		return 0
+	fi
 
-  printf '%s\n' "$line" >> "$file"
+	printf '%s\n' "$line" >>"$file"
 }
 
 prepend() {
-  if [ "$#" -ne 2 ]; then
-    printf '%s\n' 'Usage: prepend "TEXT" FILE' >&2
-    return 2
-  fi
+	if [ "$#" -ne 2 ]; then
+		printf '%s\n' 'Usage: prepend "TEXT" FILE' >&2
+		return 2
+	fi
 
-  line=$1
-  file=$2
-  # Do nothing if the exact line already exists
-  if line_exists "$line" "$file"; then
-    return 0
-  fi
+	line=$1
+	file=$2
+	# Do nothing if the exact line already exists
+	if line_exists "$line" "$file"; then
+		return 0
+	fi
 
-  tmp="${file}.$$.__tmp"
+	tmp="${file}.$$.__tmp"
 
-  if [ -f "$file" ]; then
-    { printf '%s\n' "$line"; cat "$file"; } > "$tmp" || return 1
-  else
-    printf '%s\n' "$line" > "$tmp" || return 1
-  fi
+	if [ -f "$file" ]; then
+		{
+			printf '%s\n' "$line"
+			cat "$file"
+		} >"$tmp" || return 1
+	else
+		printf '%s\n' "$line" >"$tmp" || return 1
+	fi
 
-  mv "$tmp" "$file"
+	mv "$tmp" "$file"
 }
 
 # reduce motion System Preferences -> Privacy -> Full Disk Access
@@ -95,11 +98,11 @@ killall Dock
 cp "$HOME/.zshrc" "$HOME/.zshrc-backup-$(date +%Y%m%d%H%M%S)"
 
 # brew
-if ! command -v brew &> /dev/null; then
-    echo "Homebrew not found. Installing..."
-    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+if ! command -v brew >/dev/null 2>&1; then
+	echo "Homebrew not found. Installing..."
+	NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 else
-    echo "Homebrew is already installed."
+	echo "Homebrew is already installed."
 fi
 
 curl https://raw.githubusercontent.com/chubbyhippo/homebrew-brew/refs/heads/main/Brewfile -o ~/.Brewfile
