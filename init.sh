@@ -105,6 +105,7 @@ fi
 curl https://raw.githubusercontent.com/chubbyhippo/homebrew-brew/refs/heads/main/Brewfile -o ~/.Brewfile
 export HOMEBREW_NO_INSTALL_CLEANUP=1
 brew bundle --global
+brew cleanup --prune=all
 
 append 'eval "$(mise activate zsh)"' "$HOME/.zshrc"
 curl https://raw.githubusercontent.com/chubbyhippo/aerospace/main/.aerospace.toml -o ~/.aerospace.toml
