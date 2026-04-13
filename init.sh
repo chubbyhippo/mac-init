@@ -103,6 +103,7 @@ else
 fi
 
 curl https://raw.githubusercontent.com/chubbyhippo/homebrew-brew/refs/heads/main/Brewfile -o ~/.Brewfile
+export HOMEBREW_NO_INSTALL_CLEANUP=1
 brew bundle --global
 
 append 'eval "$(mise activate zsh)"' "$HOME/.zshrc"
