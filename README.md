@@ -9,3 +9,7 @@ shfmt -l -w .
 ```
 ### refs
 https://macos-defaults.com/
+###
+```sh
+defaults read com.apple.symbolichotkeys AppleSymbolicHotKeys
+```
