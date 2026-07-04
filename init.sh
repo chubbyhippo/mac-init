@@ -120,3 +120,4 @@ brew cleanup --prune=all
 append 'eval "$(mise activate zsh)"' "$HOME/.zshrc"
 curl https://raw.githubusercontent.com/chubbyhippo/aerospace/main/.aerospace.toml -o ~/.aerospace.toml
 append 'eval "$(starship init zsh)"' "$HOME/.zshrc"
+append 'PATH="$PATH:/Applications/IntelliJ IDEA CE.app/Contents/MacOS"' "$HOME/.zshrc"
