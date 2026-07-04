@@ -92,11 +92,6 @@ defaults write com.apple.dock "mru-spaces" -bool "false"
 defaults write com.apple.LaunchServices "LSQuarantine" -bool "false"
 # disable ctrl+space
 defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 "<dict><key>enabled</key><false/><key>value</key><dict><key>parameters</key><array><integer>32</integer><integer>49</integer><integer>262144</integer></array><key>type</key><string>standard</string></dict></dict>"
-# vscodevim
-defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false              # For VS Code
-defaults write com.microsoft.VSCodeInsiders ApplePressAndHoldEnabled -bool false      # For VS Code Insider
-defaults write com.vscodium ApplePressAndHoldEnabled -bool false                      # For VS Codium
-defaults write com.microsoft.VSCodeExploration ApplePressAndHoldEnabled -bool false   # For VS Codium Exploration users
 
 # reload
 killall Dock
