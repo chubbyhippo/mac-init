@@ -1,12 +1,40 @@
 #!/usr/bin/env sh
 
+changed=0
+reload_dock=0
+reload_finder=0
+backed_up=""
+
 line_exists() {
 	if [ "$#" -ne 2 ]; then
 		printf '%s\n' 'Usage: line_exists "TEXT" FILE' >&2
 		return 2
 	fi
 
-	[ -f "$2" ] && grep -F -x -q -e "$1" "$2"
+	# ignore indentation and a leading `export` so a hand-edited variant of a
+	# managed line still counts as present
+	needle=$(printf '%s\n' "$1" | sed 's/^[[:space:]]*//; s/^export //')
+
+	[ -f "$2" ] && sed 's/^[[:space:]]*//; s/^export //' "$2" |
+		grep -F -x -q -e "$needle"
+}
+
+backup_once() {
+	if [ "$#" -ne 1 ]; then
+		printf '%s\n' 'Usage: backup_once FILE' >&2
+		return 2
+	fi
+
+	target=$1
+	# at most one backup per file per run, and only when a change is coming
+	case " $backed_up " in
+	*" $target "*) return 0 ;;
+	esac
+
+	[ -f "$target" ] || return 0
+
+	cp "$target" "$target-backup-$(date +%Y%m%d%H%M%S)" || return 1
+	backed_up="$backed_up $target"
 }
 
 append() {
@@ -22,7 +50,9 @@ append() {
 		return 0
 	fi
 
+	backup_once "$file"
 	printf '%s\n' "$line" >>"$file"
+	printf 'appended to %s: %s\n' "$file" "$line"
 }
 
 prepend() {
@@ -38,6 +68,7 @@ prepend() {
 		return 0
 	fi
 
+	backup_once "$file"
 	tmp="${file}.$$.__tmp"
 
 	if [ -f "$file" ]; then
@@ -50,6 +81,7 @@ prepend() {
 	fi
 
 	mv "$tmp" "$file"
+	printf 'prepended to %s: %s\n' "$file" "$line"
 }
 
 fetch() {
@@ -63,66 +95,133 @@ fetch() {
 	tmp="${file}.$$.__tmp"
 
 	# -f so an HTTP error fails instead of writing the error page into FILE
-	if curl -fsSL "$url" -o "$tmp"; then
-		mv "$tmp" "$file"
-	else
+	if ! curl -fsSL "$url" -o "$tmp"; then
 		rm -f "$tmp"
 		printf 'warn: could not download %s — %s left unchanged\n' "$url" "$file" >&2
 		return 1
 	fi
+
+	# leave FILE untouched when the download is byte-identical
+	if cmp -s "$tmp" "$file"; then
+		rm -f "$tmp"
+		return 0
+	fi
+
+	mv "$tmp" "$file"
+	printf 'updated %s\n' "$file"
+}
+
+set_default() {
+	if [ "$#" -lt 3 ]; then
+		printf '%s\n' 'Usage: set_default DOMAIN KEY [-type] VALUE' >&2
+		return 2
+	fi
+
+	domain=$1
+	key=$2
+	shift 2
+
+	# what `defaults read` prints back for this write form: -bool reads as
+	# 1 or 0, an untyped value is stored verbatim as a string
+	case $1 in
+	-bool)
+		case $2 in
+		true | TRUE | yes | YES | 1) want=1 ;;
+		*) want=0 ;;
+		esac
+		;;
+	-*) want=$2 ;;
+	*) want=$1 ;;
+	esac
+
+	if [ "$(defaults read "$domain" "$key" 2>/dev/null)" = "$want" ]; then
+		return 0
+	fi
+
+	defaults write "$domain" "$key" "$@"
+
+	# a protected domain fails SILENTLY without Full Disk Access, so confirm
+	# the write by reading it back
+	if [ "$(defaults read "$domain" "$key" 2>/dev/null)" != "$want" ]; then
+		printf 'warn: %s %s did not take, give the terminal Full Disk Access\n' \
+			"$domain" "$key" >&2
+		return 1
+	fi
+
+	changed=$((changed + 1))
+	case $domain in
+	com.apple.dock) reload_dock=1 ;;
+	com.apple.finder) reload_finder=1 ;;
+	esac
+	printf 'set %s %s\n' "$domain" "$key"
+}
+
+hotkey_disabled() {
+	if [ "$#" -ne 1 ]; then
+		printf '%s\n' 'Usage: hotkey_disabled SLOT' >&2
+		return 2
+	fi
+
+	defaults read com.apple.symbolichotkeys AppleSymbolicHotKeys 2>/dev/null |
+		tr -d ' \n' | grep -E -q "[;{]$1=\{enabled=0;"
 }
 
 # reduce motion System Preferences -> Privacy -> Full Disk Access
-defaults write com.apple.universalaccess "reduceMotion" -bool "true"
+set_default com.apple.universalaccess reduceMotion -bool true
 # ctrl + cmd and click to drag from anywhere
-defaults write NSGlobalDomain NSWindowShouldDragOnGesture YES
+set_default NSGlobalDomain NSWindowShouldDragOnGesture YES
 # move focus with tab and shift + tab
-defaults write NSGlobalDomain AppleKeyboardUIMode -int "2"
+set_default NSGlobalDomain AppleKeyboardUIMode -int 2
 # autohide dock, cmd + alt + d
-defaults write com.apple.dock "autohide" -bool "true"
+set_default com.apple.dock autohide -bool true
 # remove dock autohide animation
-defaults write com.apple.dock "autohide-time-modifier" -float "0"
+set_default com.apple.dock autohide-time-modifier -float 0
 # minimize animation effect
-defaults write com.apple.dock "mineffect" -string "scale"
+set_default com.apple.dock mineffect -string scale
 # show all hidden files, cmd + shift + .
-defaults write com.apple.finder "AppleShowAllFiles" -bool "true"
+set_default com.apple.finder AppleShowAllFiles -bool true
 # show path bar
-defaults write com.apple.finder "ShowPathbar" -bool "true"
+set_default com.apple.finder ShowPathbar -bool true
 # keep folders on top
-defaults write com.apple.finder "_FXSortFoldersFirst" -bool "true"
+set_default com.apple.finder _FXSortFoldersFirst -bool true
 # open folder in new window with right click
-defaults write com.apple.finder "FinderSpawnTab" -bool "false"
+set_default com.apple.finder FinderSpawnTab -bool false
 # set search scope to current folder
-defaults write com.apple.finder "FXDefaultSearchScope" -string "SCcf"
+set_default com.apple.finder FXDefaultSearchScope -string SCcf
 # do not display the warning when changing the file extension
-defaults write com.apple.finder "FXEnableExtensionChangeWarning" -bool "false"
+set_default com.apple.finder FXEnableExtensionChangeWarning -bool false
 # tap to click
-defaults write com.apple.AppleMultitouchTrackpad "Clicking" -bool "true"
+set_default com.apple.AppleMultitouchTrackpad Clicking -bool true
 # trackpad right click with two finger tab
-defaults write com.apple.AppleMultitouchTrackpad "TrackpadRightClick" -bool "true"
+set_default com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
 # trackpad three finger drag
-defaults write com.apple.AppleMultitouchTrackpad "TrackpadThreeFingerDrag" -bool "true"
+set_default com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true
 # Fn to change input source
-defaults write com.apple.HIToolbox AppleFnUsageType -int "1"
+set_default com.apple.HIToolbox AppleFnUsageType -int 1
 # Use F1–F12 as standard function keys (require Fn for media/brightness)
-defaults write NSGlobalDomain com.apple.keyboard.fnState -bool true
+set_default NSGlobalDomain com.apple.keyboard.fnState -bool true
 # repeat held keys instead of showing the accent popup
-defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+set_default NSGlobalDomain ApplePressAndHoldEnabled -bool false
 # keep space arrangement for the mission control
-defaults write com.apple.dock "mru-spaces" -bool "false"
+set_default com.apple.dock mru-spaces -bool false
 # disable application from internet popup
-defaults write com.apple.LaunchServices "LSQuarantine" -bool "false"
+set_default com.apple.LaunchServices LSQuarantine -bool false
 # disable ctrl+space
-defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 "<dict><key>enabled</key><false/><key>value</key><dict><key>parameters</key><array><integer>32</integer><integer>49</integer><integer>262144</integer></array><key>type</key><string>standard</string></dict></dict>"
-
-# reload
-killall Dock
-killall Finder
-
-# backup .zshrc
-if [ -f "$HOME/.zshrc" ]; then
-	cp "$HOME/.zshrc" "$HOME/.zshrc-backup-$(date +%Y%m%d%H%M%S)"
+if ! hotkey_disabled 60; then
+	defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 "<dict><key>enabled</key><false/><key>value</key><dict><key>parameters</key><array><integer>32</integer><integer>49</integer><integer>262144</integer></array><key>type</key><string>standard</string></dict></dict>"
+	changed=$((changed + 1))
+	printf 'set com.apple.symbolichotkeys 60\n'
 fi
+
+# reload only what actually changed
+if [ "$reload_dock" -eq 1 ]; then
+	killall Dock
+fi
+if [ "$reload_finder" -eq 1 ]; then
+	killall Finder
+fi
+
+printf 'defaults: %s changed\n' "$changed"
 
 # brew
 if ! command -v brew >/dev/null 2>&1; then
@@ -156,4 +255,4 @@ fi
 append 'eval "$(mise activate zsh)"' "$HOME/.zshrc"
 fetch https://raw.githubusercontent.com/chubbyhippo/aerospace/main/.aerospace.toml "$HOME/.aerospace.toml"
 append 'eval "$(starship init zsh)"' "$HOME/.zshrc"
-append 'PATH="$PATH:/Applications/IntelliJ IDEA CE.app/Contents/MacOS"' "$HOME/.zshrc"
+append 'export PATH="$PATH:/Applications/IntelliJ IDEA CE.app/Contents/MacOS"' "$HOME/.zshrc"
