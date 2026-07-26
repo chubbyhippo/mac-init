@@ -52,6 +52,26 @@ prepend() {
 	mv "$tmp" "$file"
 }
 
+fetch() {
+	if [ "$#" -ne 2 ]; then
+		printf '%s\n' 'Usage: fetch URL FILE' >&2
+		return 2
+	fi
+
+	url=$1
+	file=$2
+	tmp="${file}.$$.__tmp"
+
+	# -f so an HTTP error fails instead of writing the error page into FILE
+	if curl -fsSL "$url" -o "$tmp"; then
+		mv "$tmp" "$file"
+	else
+		rm -f "$tmp"
+		printf 'warn: could not download %s — %s left unchanged\n' "$url" "$file" >&2
+		return 1
+	fi
+}
+
 # reduce motion System Preferences -> Privacy -> Full Disk Access
 defaults write com.apple.universalaccess "reduceMotion" -bool "true"
 # ctrl + cmd and click to drag from anywhere
@@ -86,6 +106,8 @@ defaults write com.apple.AppleMultitouchTrackpad "TrackpadThreeFingerDrag" -bool
 defaults write com.apple.HIToolbox AppleFnUsageType -int "1"
 # Use F1–F12 as standard function keys (require Fn for media/brightness)
 defaults write NSGlobalDomain com.apple.keyboard.fnState -bool true
+# repeat held keys instead of showing the accent popup
+defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 # keep space arrangement for the mission control
 defaults write com.apple.dock "mru-spaces" -bool "false"
 # disable application from internet popup
@@ -95,9 +117,12 @@ defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 60 "<dic
 
 # reload
 killall Dock
+killall Finder
 
 # backup .zshrc
-cp "$HOME/.zshrc" "$HOME/.zshrc-backup-$(date +%Y%m%d%H%M%S)"
+if [ -f "$HOME/.zshrc" ]; then
+	cp "$HOME/.zshrc" "$HOME/.zshrc-backup-$(date +%Y%m%d%H%M%S)"
+fi
 
 # brew
 if ! command -v brew >/dev/null 2>&1; then
@@ -107,12 +132,28 @@ else
 	echo "Homebrew is already installed."
 fi
 
-curl https://raw.githubusercontent.com/chubbyhippo/homebrew-brew/refs/heads/main/Brewfile -o ~/.Brewfile
-export HOMEBREW_NO_INSTALL_CLEANUP=1
-brew bundle --global
-brew cleanup --prune=all
+# the installer only PRINTS this step, so a fresh install is not on PATH yet
+if ! command -v brew >/dev/null 2>&1; then
+	for brew_bin in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+		if [ -x "$brew_bin" ]; then
+			eval "$("$brew_bin" shellenv)"
+			append "eval \"\$($brew_bin shellenv)\"" "$HOME/.zprofile"
+			break
+		fi
+	done
+fi
+
+if command -v brew >/dev/null 2>&1; then
+	if fetch https://raw.githubusercontent.com/chubbyhippo/homebrew-brew/refs/heads/main/Brewfile "$HOME/.Brewfile"; then
+		export HOMEBREW_NO_INSTALL_CLEANUP=1
+		brew bundle --global
+		brew cleanup --prune=all
+	fi
+else
+	printf 'warn: brew is not on PATH — skipped the Brewfile bundle\n' >&2
+fi
 
 append 'eval "$(mise activate zsh)"' "$HOME/.zshrc"
-curl https://raw.githubusercontent.com/chubbyhippo/aerospace/main/.aerospace.toml -o ~/.aerospace.toml
+fetch https://raw.githubusercontent.com/chubbyhippo/aerospace/main/.aerospace.toml "$HOME/.aerospace.toml"
 append 'eval "$(starship init zsh)"' "$HOME/.zshrc"
 append 'PATH="$PATH:/Applications/IntelliJ IDEA CE.app/Contents/MacOS"' "$HOME/.zshrc"
