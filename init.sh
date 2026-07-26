@@ -61,40 +61,6 @@ append() {
 	printf 'appended to %s: %s\n' "$file" "$line"
 }
 
-prepend() {
-	if [ "$#" -ne 2 ]; then
-		printf '%s\n' 'Usage: prepend "TEXT" FILE' >&2
-		return 2
-	fi
-
-	line=$1
-	file=$2
-	# Do nothing if the exact line already exists
-	if line_exists "$line" "$file"; then
-		return 0
-	fi
-
-	if [ "$check" -eq 1 ]; then
-		printf 'would prepend to %s: %s\n' "$file" "$line"
-		return 0
-	fi
-
-	backup_once "$file"
-	tmp="${file}.$$.__tmp"
-
-	if [ -f "$file" ]; then
-		{
-			printf '%s\n' "$line"
-			cat "$file"
-		} >"$tmp" || return 1
-	else
-		printf '%s\n' "$line" >"$tmp" || return 1
-	fi
-
-	mv "$tmp" "$file"
-	printf 'prepended to %s: %s\n' "$file" "$line"
-}
-
 fetch() {
 	if [ "$#" -ne 2 ]; then
 		printf '%s\n' 'Usage: fetch URL FILE' >&2
