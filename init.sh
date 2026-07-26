@@ -166,6 +166,11 @@ hotkey_disabled() {
 		tr -d ' \n' | grep -E -q "[;{]$1=\{enabled=0;"
 }
 
+kanata_deployed() {
+	[ -f /etc/kanata/mac.kbd ] &&
+		[ -f /Library/LaunchDaemons/dev.kanata.kanata.plist ]
+}
+
 # reduce motion System Preferences -> Privacy -> Full Disk Access
 set_default com.apple.universalaccess reduceMotion -bool true
 # ctrl + cmd and click to drag from anywhere
@@ -250,6 +255,27 @@ if command -v brew >/dev/null 2>&1; then
 	fi
 else
 	printf 'warn: brew is not on PATH — skipped the Brewfile bundle\n' >&2
+fi
+
+# kanata, not in the Brewfile
+if ! command -v kanata >/dev/null 2>&1; then
+	if command -v brew >/dev/null 2>&1; then
+		brew install kanata
+	else
+		printf 'warn: brew is not on PATH — skipped installing kanata\n' >&2
+	fi
+fi
+
+# the keyboard config, its driver and its daemons, as root. The first run stops
+# for a one-time driver approval in System Settings and the next run finishes
+if command -v kanata >/dev/null 2>&1 && ! kanata_deployed; then
+	installer=$(mktemp /tmp/kanata-install.XXXXXX)
+	if curl -fsSL https://raw.githubusercontent.com/chubbyhippo/kanata-settings/refs/heads/main/mac/install.sh -o "$installer"; then
+		sudo sh "$installer"
+	else
+		printf 'warn: could not download the kanata installer\n' >&2
+	fi
+	rm -f "$installer"
 fi
 
 append 'eval "$(mise activate zsh)"' "$HOME/.zshrc"
